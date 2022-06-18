@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type = "text/javascript">  
+	function search(){   
+		addrCd = $("#addrCd").val();
+		if (addrCd !== ""){
+			addrCd = addrCd.replace(/\s/g,'');
+			addrCd = addrCd.toLowerCase();
+			$("#addrCd").val(addrCd);
+			streetCheckSrc = "https://www.streetcheck.co.uk/postcode/" + addrCd;
+			walkScoreSrc ="https://www.walkscore.com/score/" + addrCd;
+			zooplaSrc = "https://www.zoopla.co.uk/house-prices/";
+			googleMapSrc = "https://www.google.com.hk/maps/place/" + addrCd;
+			epcCheckSrc = "https://find-energy-certificate.service.gov.uk/find-a-certificate/search-by-postcode?postcode=" + addrCd;
+			window.open(streetCheckSrc);
+			window.open(walkScoreSrc);
+			window.open(zooplaSrc);
+			window.open(googleMapSrc);
+			window.open(epcCheckSrc);
+		}
+	}
+</script>
+</head>
+<body>
+
+<form>
+  <h2>UK Property Due Diligence</h2>
+  <p>Please enter the followings</p>
+  <label for="addrCd">Address code:</label><br>
+  <input type="text" id="addrCd" name="addrCd">
+  <input type="button" onclick="search()" value="Search">
+</form>
+
+</body>
+</html>
+
