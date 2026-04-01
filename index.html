@@ -1,42 +1,596 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script type = "text/javascript">  
-	function search(){   
-		addrCd = $("#addrCd").val();
-		if (addrCd !== ""){
-			addrCd = addrCd.replace(/\s/g,'');
-			addrCd = addrCd.toLowerCase();
-			$("#addrCd").val(addrCd);
-			streetCheckSrc = "https://www.streetcheck.co.uk/postcode/" + addrCd;
-			walkScoreSrc ="https://www.walkscore.com/score/" + addrCd;
-			zooplaSrc = "https://www.zoopla.co.uk/house-prices/";
-			googleMapSrc = "https://www.google.com.hk/maps/place/" + addrCd;
-			epcCheckSrc = "https://find-energy-certificate.service.gov.uk/find-a-certificate/search-by-postcode?postcode=" + addrCd;
-			longTermFloodRiskSrc = "https://check-long-term-flood-risk.service.gov.uk/search?postcode=" + addrCd;
-			coalCheckSrc = "https://mapapps2.bgs.ac.uk/coalauthority/home.html";
-			window.open(streetCheckSrc);
-			window.open(walkScoreSrc);
-			window.open(zooplaSrc);
-			window.open(googleMapSrc);
-			window.open(epcCheckSrc);
-			window.open(longTermFloodRiskSrc);
-			window.open(coalCheckSrc);
-		}
-	}
-</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我也會讀題目 — Support</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      background: linear-gradient(135deg, #fdf2f8 0%, #ede9fe 100%);
+      min-height: 100vh;
+      color: #1e293b;
+    }
+    .container { max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .hero { text-align: center; padding: 2rem 0; }
+    .hero .icon { font-size: 4rem; margin-bottom: 0.5rem; }
+    .hero h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .hero .subtitle { color: #64748b; font-size: 1rem; }
+
+    /* Language toggle */
+    .lang-toggle {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .lang-toggle button {
+      background: #7c3aed;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .lang-toggle button:hover { background: #6d28d9; }
+
+    /* Tab navigation */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1.25rem;
+      background: #fff;
+      border-radius: 0.75rem;
+      padding: 0.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem 0.25rem;
+      border: none;
+      background: transparent;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: #7c3aed;
+      color: #fff;
+    }
+    .tab-btn:hover:not(.active) { background: #f3f0ff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Cards */
+    .card {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .card h2 { font-size: 1.15rem; margin-bottom: 0.75rem; color: #7c3aed; }
+    .card h3 { font-size: 1rem; margin-bottom: 0.5rem; margin-top: 0.75rem; color: #1e293b; }
+    .card p, .card li { line-height: 1.7; color: #475569; }
+    .card ul, .card ol { padding-left: 1.25rem; }
+    .card li { margin-bottom: 0.35rem; }
+    .card p + p { margin-top: 0.75rem; }
+    a { color: #7c3aed; }
+    .contact-btn {
+      display: inline-block;
+      background: #7c3aed;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    .footer { text-align: center; padding: 2rem 0 1rem; color: #94a3b8; font-size: 0.85rem; }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <div class="hero">
+      <div class="icon">📖</div>
+      <h1>我也會讀題目</h1>
+      <p class="subtitle">I Can Read Questions</p>
+    </div>
 
-<form>
-  <h2>UK Property Due Diligence</h2>
-  <p>Please enter the followings</p>
-  <label for="addrCd">Address code:</label><br>
-  <input type="text" id="addrCd" name="addrCd">
-  <input type="button" onclick="search()" value="Search">
-</form>
+    <!-- Language toggle -->
+    <div class="lang-toggle">
+      <button onclick="toggleLang()" id="langBtn">繁體中文</button>
+    </div>
 
+    <!-- Tab navigation -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="support" id="tabSupport">Support</button>
+      <button class="tab-btn" data-tab="privacy" id="tabPrivacy">Privacy Policy</button>
+      <button class="tab-btn" data-tab="choices" id="tabChoices">Privacy Choices</button>
+    </div>
+
+    <!-- ==================== ENGLISH ==================== -->
+
+    <!-- Support (EN) -->
+    <div class="tab-content active" id="support-en">
+      <div class="card">
+        <h2>About the App</h2>
+        <p>
+          「我也會讀題目」is a fun, interactive Chinese vocabulary learning app for children ages 3–12.
+          Kids learn essential Math and Reading Comprehension words through audio-based quizzes and
+          illustrated flashcards, covering Preschool through Primary 6.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Features</h2>
+        <ul>
+          <li>60+ vocabulary words across 7 grade levels</li>
+          <li>Learn mode with pinyin, audio, and example sentences</li>
+          <li>Quiz mode — listen and match the correct character</li>
+          <li>Supports Simplified Chinese, Traditional Chinese, and English</li>
+          <li>Child-friendly design with animations and confetti rewards</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>Frequently Asked Questions</h2>
+        <p><strong>Q: Is the app free?</strong><br>
+           A: Yes! The app is free to download and use. It is supported by ads.</p>
+        <p><strong>Q: What ages is it for?</strong><br>
+           A: The app is designed for children ages 3–12, from Preschool to Primary 6.</p>
+        <p><strong>Q: Does it work offline?</strong><br>
+           A: The core learning and quiz features work offline. Text-to-speech requires an internet connection on some devices.</p>
+        <p><strong>Q: Which devices are supported?</strong><br>
+           A: The app is available on iPhone and iPad running iOS 16 or later.</p>
+      </div>
+      <div class="card">
+        <h2>Contact &amp; Support</h2>
+        <p>Having trouble or have a suggestion? We'd love to hear from you!</p>
+        <p>
+          <a class="contact-btn" href="https://github.com/simpsonex/chinese-i-can-learn/issues">
+            Report an Issue on GitHub
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Privacy Policy (EN) -->
+    <div class="tab-content" id="privacy-en">
+      <div class="card">
+        <h2>Introduction</h2>
+        <p>
+          This Privacy Policy explains how "I Can Read Questions" (我也會讀題目) (the "App"),
+          developed by KSN, handles information when you use the App.
+          We are committed to protecting the privacy of our users, especially children.
+        </p>
+        <p><strong>Effective Date:</strong> April 1, 2026</p>
+      </div>
+      <div class="card">
+        <h2>Information We Collect</h2>
+        <p>
+          <strong>We do not collect, store, or share any personal information.</strong>
+          The App does not require an account, login, or registration of any kind.
+          No names, email addresses, photos, or location data are ever requested or gathered.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Children's Privacy</h2>
+        <p>
+          The App is designed for children ages 3–12. We comply with the Children's Online Privacy
+          Protection Act (COPPA) and similar regulations. We do not knowingly collect personal
+          information from children. If you believe a child has provided us with personal data,
+          please contact us so we can delete it.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Third-Party Services — Advertising</h2>
+        <p>
+          The App displays advertisements through <strong>Google AdMob</strong>.
+          Google AdMob may collect and use certain data (such as device identifiers, IP address,
+          and general usage data) to serve ads. For users in the EEA/UK, consent is requested
+          before personalised ads are shown.
+        </p>
+        <p>
+          For children or users who have not consented to personalised advertising, ads are served
+          in a limited, non-personalised manner in compliance with Google's policies.
+        </p>
+        <p>
+          For more information, see
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>
+          and
+          <a href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener">How Google uses information from apps</a>.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Text-to-Speech</h2>
+        <p>
+          The App uses on-device text-to-speech to play audio pronunciations. On some devices this
+          feature may require an internet connection. No voice data is recorded or transmitted by the App.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Data Storage</h2>
+        <p>
+          All learning data (such as quiz progress) is stored locally on your device.
+          No data is sent to external servers by the App itself.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Your Choices</h2>
+        <p>
+          You can manage your ad personalisation preferences within the App or through your device
+          settings. See the <a href="javascript:void(0)" onclick="switchTab('choices')">User Privacy Choices</a> tab for details.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy from time to time. Any changes will be posted on this
+          page with an updated effective date. We encourage you to review this page periodically.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Contact Us</h2>
+        <p>If you have questions about this Privacy Policy, please contact us at:</p>
+        <p>
+          <a href="https://github.com/simpsonex/chinese-i-can-learn/issues" target="_blank" rel="noopener">GitHub Issues</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Privacy Choices (EN) -->
+    <div class="tab-content" id="choices-en">
+      <div class="card">
+        <h2>Overview</h2>
+        <p>
+          "I Can Read Questions" respects your privacy. This page explains the choices you have
+          regarding data collection and advertising within the App.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Ad Personalisation</h2>
+        <p>
+          The App uses Google AdMob to display advertisements. You have the following options
+          regarding ad personalisation:
+        </p>
+        <h3>Opt Out of Personalised Ads (iOS)</h3>
+        <ol>
+          <li>Open your device <strong>Settings</strong></li>
+          <li>Go to <strong>Privacy &amp; Security</strong> → <strong>Tracking</strong></li>
+          <li>Disable <strong>Allow Apps to Request to Track</strong>, or turn off tracking for this App specifically</li>
+        </ol>
+        <p>
+          You can also limit ad tracking under <strong>Settings</strong> → <strong>Privacy &amp; Security</strong>
+          → <strong>Apple Advertising</strong> → turn off <strong>Personalised Ads</strong>.
+        </p>
+        <h3>Google Ad Settings</h3>
+        <p>
+          You can manage Google's ad personalisation settings at:<br>
+          <a href="https://adssettings.google.com" target="_blank" rel="noopener">https://adssettings.google.com</a>
+        </p>
+      </div>
+      <div class="card">
+        <h2>App Tracking Transparency (ATT)</h2>
+        <p>
+          On iOS 14.5 and later, the App will request your permission before tracking your activity
+          across other companies' apps and websites. You can change this at any time in your device
+          settings under <strong>Privacy &amp; Security</strong> → <strong>Tracking</strong>.
+        </p>
+        <p>If you deny tracking, ads will still be displayed but they will be non-personalised.</p>
+      </div>
+      <div class="card">
+        <h2>Data Collected by Third Parties</h2>
+        <p>
+          The App itself does not collect personal data. However, Google AdMob, as a third-party
+          advertising service, may collect:
+        </p>
+        <ul>
+          <li>Device identifiers (e.g. IDFA on iOS)</li>
+          <li>IP address</li>
+          <li>General usage and interaction data</li>
+          <li>Crash and diagnostic data</li>
+        </ul>
+        <p>
+          This data is handled according to
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.
+        </p>
+      </div>
+      <div class="card">
+        <h2>Data Deletion</h2>
+        <p>
+          Since the App does not collect or store personal data on any server, there is no account
+          data to delete. All learning progress is stored locally on your device and can be removed
+          by uninstalling the App.
+        </p>
+        <p>
+          To request deletion of any data Google may have collected through AdMob, visit:<br>
+          <a href="https://myaccount.google.com/delete-services-or-account" target="_blank" rel="noopener">Google Account — Delete Services</a>
+        </p>
+      </div>
+      <div class="card">
+        <h2>Contact Us</h2>
+        <p>If you have any questions about your privacy choices, please reach out:</p>
+        <p>
+          <a href="https://github.com/simpsonex/chinese-i-can-learn/issues" target="_blank" rel="noopener">GitHub Issues</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- ==================== 繁體中文 ==================== -->
+
+    <!-- Support (ZH) -->
+    <div class="tab-content" id="support-zh">
+      <div class="card">
+        <h2>關於本應用程式</h2>
+        <p>
+          「我也會讀題目」是一款有趣的互動式中文詞彙學習應用程式，適合 3 至 12 歲的兒童。
+          孩子們透過語音測驗和圖文學習卡，學習數學和閱讀理解的常用詞彙，
+          涵蓋幼稚園至小學六年級。
+        </p>
+      </div>
+      <div class="card">
+        <h2>功能</h2>
+        <ul>
+          <li>超過 60 個詞彙，涵蓋 7 個年級</li>
+          <li>學習模式：包含拼音、語音和例句</li>
+          <li>測驗模式：聽音辨字，選出正確的字詞</li>
+          <li>支援簡體中文、繁體中文和英文</li>
+          <li>兒童友善設計，含動畫和彩紙獎勵</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2>常見問題</h2>
+        <p><strong>問：這個應用程式免費嗎？</strong><br>
+           答：是的！應用程式免費下載和使用，由廣告支持。</p>
+        <p><strong>問：適合什麼年齡？</strong><br>
+           答：本應用程式適合 3 至 12 歲的兒童，從幼稚園到小學六年級。</p>
+        <p><strong>問：離線可以使用嗎？</strong><br>
+           答：核心的學習和測驗功能可以離線使用。文字轉語音功能在部分裝置上可能需要網際網路連線。</p>
+        <p><strong>問：支援哪些裝置？</strong><br>
+           答：本應用程式可在搭載 iOS 16 或更新版本的 iPhone 和 iPad 上使用。</p>
+      </div>
+      <div class="card">
+        <h2>聯絡與支援</h2>
+        <p>遇到問題或有建議？我們樂意聽取您的意見！</p>
+        <p>
+          <a class="contact-btn" href="https://github.com/simpsonex/chinese-i-can-learn/issues">
+            在 GitHub 回報問題
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Privacy Policy (ZH) -->
+    <div class="tab-content" id="privacy-zh">
+      <div class="card">
+        <h2>簡介</h2>
+        <p>
+          本隱私權政策說明「我也會讀題目」（以下簡稱「本應用程式」）由 KSN 開發，
+          在您使用本應用程式時如何處理相關資訊。我們致力保護使用者的隱私，尤其是兒童使用者。
+        </p>
+        <p><strong>生效日期：</strong>2026 年 4 月 1 日</p>
+      </div>
+      <div class="card">
+        <h2>我們收集的資訊</h2>
+        <p>
+          <strong>我們不會收集、儲存或分享任何個人資訊。</strong>
+          本應用程式不需要帳號、登入或任何形式的註冊。
+          我們不會要求或收集任何姓名、電子郵件地址、相片或位置資料。
+        </p>
+      </div>
+      <div class="card">
+        <h2>兒童隱私</h2>
+        <p>
+          本應用程式專為 3 至 12 歲的兒童設計。我們遵守《兒童網路隱私保護法》（COPPA）及相關法規。
+          我們不會故意收集兒童的個人資訊。如果您認為有兒童向我們提供了個人資料，
+          請與我們聯絡，以便我們刪除相關資料。
+        </p>
+      </div>
+      <div class="card">
+        <h2>第三方服務 — 廣告</h2>
+        <p>
+          本應用程式透過 <strong>Google AdMob</strong> 顯示廣告。
+          Google AdMob 可能會收集和使用某些資料（例如裝置識別碼、IP 位址和一般使用資料）來投放廣告。
+          對於歐洲經濟區／英國的使用者，在顯示個人化廣告之前會先徵求同意。
+        </p>
+        <p>
+          對於兒童或未同意個人化廣告的使用者，廣告將以有限的、非個人化的方式投放，
+          符合 Google 的相關政策。
+        </p>
+        <p>
+          如需更多資訊，請參閱
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 隱私權政策</a>
+          及
+          <a href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener">Google 如何使用應用程式中的資訊</a>。
+        </p>
+      </div>
+      <div class="card">
+        <h2>文字轉語音</h2>
+        <p>
+          本應用程式使用裝置內建的文字轉語音功能來播放發音。部分裝置上此功能可能需要網際網路連線。
+          本應用程式不會錄製或傳送任何語音資料。
+        </p>
+      </div>
+      <div class="card">
+        <h2>資料儲存</h2>
+        <p>
+          所有學習資料（例如測驗進度）均儲存在您的裝置上。
+          本應用程式本身不會將任何資料傳送至外部伺服器。
+        </p>
+      </div>
+      <div class="card">
+        <h2>您的選擇</h2>
+        <p>
+          您可以在應用程式內或透過裝置設定管理廣告個人化偏好。如需更多詳情，請參閱
+          <a href="javascript:void(0)" onclick="switchTab('choices')">使用者隱私權選擇</a>分頁。
+        </p>
+      </div>
+      <div class="card">
+        <h2>政策變更</h2>
+        <p>
+          我們可能會不時更新本隱私權政策。任何變更都會以更新的生效日期公布在此頁面上。
+          我們建議您定期查閱此頁面。
+        </p>
+      </div>
+      <div class="card">
+        <h2>聯絡我們</h2>
+        <p>如果您對本隱私權政策有任何疑問，請透過以下方式與我們聯絡：</p>
+        <p>
+          <a href="https://github.com/simpsonex/chinese-i-can-learn/issues" target="_blank" rel="noopener">GitHub Issues</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Privacy Choices (ZH) -->
+    <div class="tab-content" id="choices-zh">
+      <div class="card">
+        <h2>概述</h2>
+        <p>
+          「我也會讀題目」尊重您的隱私。本頁面說明您在應用程式中有關資料收集和廣告的選擇權。
+        </p>
+      </div>
+      <div class="card">
+        <h2>廣告個人化</h2>
+        <p>
+          本應用程式使用 Google AdMob 顯示廣告。您可以透過以下方式管理廣告個人化：
+        </p>
+        <h3>退出個人化廣告（iOS）</h3>
+        <ol>
+          <li>開啟裝置的<strong>設定</strong></li>
+          <li>前往<strong>隱私權與安全性</strong> → <strong>追蹤</strong></li>
+          <li>關閉<strong>允許 App 要求追蹤</strong>，或針對本應用程式單獨關閉追蹤</li>
+        </ol>
+        <p>
+          您也可以在<strong>設定</strong> → <strong>隱私權與安全性</strong>
+          → <strong>Apple 廣告</strong> → 關閉<strong>個人化廣告</strong>來限制廣告追蹤。
+        </p>
+        <h3>Google 廣告設定</h3>
+        <p>
+          您可以在以下網址管理 Google 的廣告個人化設定：<br>
+          <a href="https://adssettings.google.com" target="_blank" rel="noopener">https://adssettings.google.com</a>
+        </p>
+      </div>
+      <div class="card">
+        <h2>App 追蹤透明度（ATT）</h2>
+        <p>
+          在 iOS 14.5 及更新版本上，本應用程式會在追蹤您跨其他公司應用程式和網站的活動之前，
+          先請求您的許可。您可以隨時在裝置設定中的<strong>隱私權與安全性</strong> → <strong>追蹤</strong>
+          中更改此設定。
+        </p>
+        <p>如果您拒絕追蹤，廣告仍會顯示，但將以非個人化的方式呈現。</p>
+      </div>
+      <div class="card">
+        <h2>第三方收集的資料</h2>
+        <p>
+          本應用程式本身不會收集個人資料。但 Google AdMob 作為第三方廣告服務，可能會收集：
+        </p>
+        <ul>
+          <li>裝置識別碼（例如 iOS 上的 IDFA）</li>
+          <li>IP 位址</li>
+          <li>一般使用和互動資料</li>
+          <li>當機和診斷資料</li>
+        </ul>
+        <p>
+          這些資料依照
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 隱私權政策</a>處理。
+        </p>
+      </div>
+      <div class="card">
+        <h2>資料刪除</h2>
+        <p>
+          由於本應用程式不會在任何伺服器上收集或儲存個人資料，因此沒有帳號資料需要刪除。
+          所有學習進度均儲存在您的裝置上，解除安裝應用程式即可移除。
+        </p>
+        <p>
+          如需要求刪除 Google 透過 AdMob 可能收集的資料，請前往：<br>
+          <a href="https://myaccount.google.com/delete-services-or-account" target="_blank" rel="noopener">Google 帳戶 — 刪除服務</a>
+        </p>
+      </div>
+      <div class="card">
+        <h2>聯絡我們</h2>
+        <p>如果您對隱私權選擇有任何疑問，請與我們聯絡：</p>
+        <p>
+          <a href="https://github.com/simpsonex/chinese-i-can-learn/issues" target="_blank" rel="noopener">GitHub Issues</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      &copy; 2025–2026 KSN. All rights reserved.
+    </div>
+  </div>
+
+  <script>
+    var lang = 'en';
+    var currentTab = 'support';
+
+    var tabLabels = {
+      en: { support: 'Support', privacy: 'Privacy Policy', choices: 'Privacy Choices' },
+      zh: { support: '支援', privacy: '隱私權政策', choices: '隱私權選擇' }
+    };
+
+    // Check URL hash on load
+    (function () {
+      var hash = location.hash.replace('#', '');
+      if (hash) {
+        var parts = hash.split('-');
+        // e.g. #privacy, #privacy-zh, #choices-zh, #support
+        var tab = parts[0];
+        if (parts.length > 1 && parts[parts.length - 1] === 'zh') {
+          lang = 'zh';
+          // tab is everything except the last "-zh"
+          tab = parts.slice(0, -1).join('-');
+        }
+        if (['support', 'privacy', 'choices'].indexOf(tab) !== -1) {
+          currentTab = tab;
+        }
+      }
+      render();
+    })();
+
+    function render() {
+      // Update language button
+      document.getElementById('langBtn').textContent = lang === 'en' ? '繁體中文' : 'English';
+
+      // Update tab labels
+      var btns = document.querySelectorAll('.tab-btn');
+      btns.forEach(function (btn) {
+        var t = btn.getAttribute('data-tab');
+        btn.textContent = tabLabels[lang][t];
+        btn.classList.toggle('active', t === currentTab);
+      });
+
+      // Show/hide content
+      document.querySelectorAll('.tab-content').forEach(function (el) { el.classList.remove('active'); });
+      var activeId = currentTab + '-' + lang;
+      var el = document.getElementById(activeId);
+      if (el) el.classList.add('active');
+
+      // Update hash
+      var hash = currentTab;
+      if (lang === 'zh') hash += '-zh';
+      history.replaceState(null, '', '#' + hash);
+    }
+
+    function toggleLang() {
+      lang = lang === 'en' ? 'zh' : 'en';
+      render();
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Tab click handlers
+    document.querySelectorAll('.tab-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        switchTab(this.getAttribute('data-tab'));
+      });
+    });
+  </script>
 </body>
 </html>
-
