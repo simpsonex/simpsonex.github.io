@@ -547,10 +547,10 @@
           currentTab = tab;
         }
       }
-      render();
+      render(!!hash);
     })();
 
-    function render() {
+    function render(updateHash) {
       // Update language button
       document.getElementById('langBtn').textContent = lang === 'en' ? '繁體中文' : 'English';
 
@@ -568,20 +568,21 @@
       var el = document.getElementById(activeId);
       if (el) el.classList.add('active');
 
-      // Update hash
-      var hash = currentTab;
-      if (lang === 'zh') hash += '-zh';
-      history.replaceState(null, '', '#' + hash);
+      if (updateHash) {
+        var hash = currentTab;
+        if (lang === 'zh') hash += '-zh';
+        history.replaceState(null, '', '#' + hash);
+      }
     }
 
     function toggleLang() {
       lang = lang === 'en' ? 'zh' : 'en';
-      render();
+      render(true);
     }
 
     function switchTab(tab) {
       currentTab = tab;
-      render();
+      render(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
